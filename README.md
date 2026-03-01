@@ -171,17 +171,25 @@ AR(20) consistently improves RMSE by ~25–31% relative to naive forecasts.
 
 What we uncovered in XLK therefore seems to reflect a general feature of ETF liquidity rather than something asset-specific.
 
+
+4. Nonlinear Models Provide Incremental Gains
+
+To test whether liquidity dynamics contain nonlinear structure beyond linear autoregression, we implement a Gradient Boosting model with lagged liquidity, volatility, rolling statistics, and regime features.
+
+Relative to AR(20), the nonlinear model improves RMSE by approximately 4–5%. The gain is modest but consistent, suggesting that some interactions — particularly those involving volatility under stress conditions — are not fully captured by linear dynamics.
+
+At the same time, the magnitude of improvement indicates that nonlinear effects are secondary. Most predictive power still arises from liquidity’s multi-day persistence, with machine learning refining rather than redefining the signal.
+
+<img src="plots/hgb_vs_actual.png" width="700">
+
 ---
-Structured Insights
 
+## Takeaways
 
-Persistence is strong
+This project set out to forecast daily ETF liquidity using a disciplined time-series framework. Across models, regimes, and assets, one result stands out clearly: liquidity exhibits strong multi-day persistence.
 
-Volatility has nonlinear effects
+An AR(20) model consistently improves upon a naive benchmark by roughly 25–30%, and this improvement remains stable across macroeconomic regimes and across different ETFs. The dominant source of predictability comes from liquidity’s own autoregressive structure.
 
-Gains are robust across regimes
+Gradient Boosting further improves forecasting performance by approximately 4–5% relative to the linear AR benchmark. While the incremental gain is moderate, it indicates the presence of nonlinear interactions — particularly in how volatility relates to future liquidity under stress conditions. These nonlinear effects are real but secondary to the core persistence dynamic.
 
-Results replicate cross-asset
-
----
-Takeaways
+Overall, ETF liquidity behaves as a gradually evolving market state rather than as pure noise. Its short-horizon dynamics are structured, robust, and remarkably stable across environments.
