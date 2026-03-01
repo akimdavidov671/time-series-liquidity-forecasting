@@ -58,3 +58,34 @@ For robustness and cross-asset validation, the analysis is later replicated on:
 
 ---
 
+Modeling Approach (Concise, Conceptual)
+
+How the problem is framed (time-series forecasting)
+
+Evaluation strategy (walk-forward, expanding window)
+
+Benchmark (naive persistence)
+
+Models tested (AR, Ridge, Gradient Boosting)
+
+Why those choices make sense
+
+---
+Key Results (High-Level First)
+
+“AR(20) reduces RMSE by ~27–30% vs naive across assets and regimes.”
+
+---
+Structured Insights
+
+
+Persistence is strong
+
+Volatility has nonlinear effects
+
+Gains are robust across regimes
+
+Results replicate cross-asset
+
+---
+Takeaways
