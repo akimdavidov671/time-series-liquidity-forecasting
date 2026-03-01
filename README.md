@@ -66,28 +66,110 @@ For robustness and cross-asset validation, the analysis is later replicated on:
 #### Problem Framing
 
 The objective is to forecast next-day ETF liquidity using a one-step-ahead time-series framework. Liquidity is measured using the Amihud illiquidity ratio:  
+
 $ILLIQ_t = \frac{|Return_t|}{Dollar Volume}$
+
+<img src="plots/amihud_illiquidity.png" width="700">
 
 However, the raw Amihud measure is highly skewed and exhibits extreme spikes, particularly in earlier years (see plot below). To stabilize variance and reduce the influence of outliers, the forecasting target is defined as:
 
 $Log_ILLIQ_t ​= log(ILLIQ_t)​$
 
+<img src="plots/log_illiquidity.png" width="700">
+
 The log transformation produces a more stable and approximately stationary series, making it better suited for regression-based forecasting models.
 
 
+#### Evaluation Strategy
 
-Evaluation strategy (walk-forward, expanding window)
+All models are evaluated using a walk-forward expanding-window framework:
 
-Benchmark (naive persistence)
+- At each time step, the model is trained only on past data.
 
-Models tested (AR, Ridge, Gradient Boosting)
+- A one-step-ahead forecast is generated.
 
-Why those choices make sense
+- The training window expands as time progresses.
+
+This setup mimics real-time forecasting and prevents look-ahead bias.
+
+Performance is measured using:
+
+- RMSE (Root Mean Squared Error)
+
+- MAE (Mean Absolute Error)
+
+- Benchmark (naive persistence)
+
+#### Models Tested
+
+Several forecasting approaches are compared:
+
+- AR(20) — captures multi-day autoregressive structure.
+
+- Ridge regression with lagged features — regularized linear model.
+
+- Gradient Boosting (HistGradientBoostingRegressor) — nonlinear tree-based model.
+
+- Feature-augmented specifications including volatility, rolling statistics, and regime indicators.
+
+This progression allows comparison between:
+
+- Pure persistence
+
+- Linear structure
+
+- Regularized linear models
+
+- Nonlinear machine learning methods
 
 ---
-Key Results (High-Level First)
+## Key Results
 
-“AR(20) reduces RMSE by ~27–30% vs naive across assets and regimes.”
+1. Liquidity Exhibits Strong Multi-Day Persistence
+
+The first figure shows AR(p) performance relative to a naive persistence benchmark. Even a small lag structure improves forecasts, but performance increases sharply as additional lags are included.
+
+<img src="plots/ar_vs_naive.png" width="700">
+
+By p=10, the model already captures most of the available signal.
+At p=20, AR improves RMSE by roughly 27–29% over naive persistence, with only marginal gains beyond that point.
+
+This indicates that daily liquidity is not random noise.
+It behaves as a slowly evolving state variable with memory extending multiple trading days.
+
+<img src="plots/ar20_vs_actual.png" width="700">
+
+2. Volatility Affects Liquidity — But Not Linearly
+
+The second figure shows the distribution of the volatility coefficient from rolling Ridge regressions.
+
+<img src="plots/vol_boxplot.png" width="500">
+
+The coefficient is predominantly negative, confirming an economically intuitive relationship:
+
+- Higher volatility yesterday is associated with higher illiquidity today.
+
+However, earlier linear experiments showed that adding volatility lags barely improved forecasting accuracy. This suggests that while volatility and liquidity are structurally related, much of that information is already embedded in liquidity’s own persistence. The effect exists — but it is not a dominant incremental driver in a linear setting.
+
+3. Persistence Survives Across Market Regimes
+
+For XLK, the regime breakdown shows that the main result does not disappear in different environments. In every period — from pre-GFC to COVID — AR(20) improves over naive by roughly 26–31%. When we repeat the same exercise for SPY, IWM, and XLF, the magnitude of improvement looks very similar.
+
+<img src="plots/rmse_vs_naive_boxplot.png" width="800">
+
+Across:
+
+- Pre-GFC
+
+- Global Financial Crisis
+
+- Post-crisis QE
+
+- COVID / tightening cycle
+
+AR(20) consistently improves RMSE by ~25–31% relative to naive forecasts.
+
+What we uncovered in XLK therefore seems to reflect a general feature of ETF liquidity rather than something asset-specific.
 
 ---
 Structured Insights
