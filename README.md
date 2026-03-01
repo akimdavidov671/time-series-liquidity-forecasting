@@ -20,6 +20,8 @@ Forecasting liquidity is economically important for several reasons:
 
 - Market makers adjust spreads and inventory based on expected trading conditions.
 
+- 
+
 If liquidity exhibits predictable structure this information can improve trading decisions, capital allocation, and risk assessment.
 
 ---
@@ -58,9 +60,21 @@ For robustness and cross-asset validation, the analysis is later replicated on:
 
 ---
 
-Modeling Approach (Concise, Conceptual)
+## Modeling Approach
 
-How the problem is framed (time-series forecasting)
+
+#### Problem Framing
+
+The objective is to forecast next-day ETF liquidity using a one-step-ahead time-series framework. Liquidity is measured using the Amihud illiquidity ratio:  
+$ILLIQ_t = \frac{|Return_t|}{Dollar Volume}$
+
+However, the raw Amihud measure is highly skewed and exhibits extreme spikes, particularly in earlier years (see plot below). To stabilize variance and reduce the influence of outliers, the forecasting target is defined as:
+
+$Log_ILLIQ_t ​= log(ILLIQ_t)​$
+
+The log transformation produces a more stable and approximately stationary series, making it better suited for regression-based forecasting models.
+
+
 
 Evaluation strategy (walk-forward, expanding window)
 
