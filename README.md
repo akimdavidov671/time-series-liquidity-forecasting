@@ -20,9 +20,7 @@ Forecasting liquidity is economically important for several reasons:
 
 - Market makers adjust spreads and inventory based on expected trading conditions.
 
-- 
-
-If liquidity exhibits predictable structure this information can improve trading decisions, capital allocation, and risk assessment.
+- If liquidity exhibits predictable structure this information can improve trading decisions, capital allocation, and risk assessment.
 
 ---
 
@@ -44,9 +42,7 @@ If liquidity exhibits predictable structure this information can improve trading
 
 The primary dataset consists of daily historical market data for XLK (Technology Select Sector ETF), which serves as the main asset for model development and evaluation.
 
-Data is downloaded using yfinance and includes daily:
-
-- Open, High, Low, Close prices and Trading Volume
+Data is downloaded using yfinance and includes daily open, high, low, close prices and trading volume
 
 The XLK sample spans approximately 2000–2024, covering multiple macroeconomic environments including the Global Financial Crisis, post-crisis QE period, and the COVID/tightening cycle.
 
@@ -71,7 +67,7 @@ $ILLIQ_t = \frac{|Return_t|}{Dollar Volume}$
 
 <img src="plots/amihud_illiquidity.png" width="700">
 
-However, the raw Amihud measure is highly skewed and exhibits extreme spikes, particularly in earlier years (see plot below). To stabilize variance and reduce the influence of outliers, the forecasting target is defined as:
+However, the raw Amihud measure is highly skewed and exhibits extreme spikes, particularly in earlier years (see plot above). To stabilize variance and reduce the influence of outliers, the forecasting target is defined as:
 
 $Log_ILLIQ_t ​= log(ILLIQ_t)​$
 
